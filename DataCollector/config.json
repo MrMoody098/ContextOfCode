@@ -1,0 +1,19 @@
+{
+  "app_name": "app",
+  "server": {
+    "host": "localhost",
+    "port": 5000,
+    "debug": false
+  },
+
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_path": "C:\\Users\\ticta\\MyRepos\\ContextOfCode\\DataCollector\\logs\\app.log"
+  },
+
+  "third_party_api": {
+    "url": "http://api.coinlayer.com/live?access_key=0cfad9715a7faebfb73c5dbb5e93fd8c&target=EUR&symbols=BTC,SOL,XMR",
+    "cache_timeout_m": 0.1
+  }
+}
