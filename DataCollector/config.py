@@ -22,6 +22,12 @@ class ThirdPartyAPIConfig(BaseModel):
     url: str
     cache_timeout_m: float
 
+
+class UploaderAPIConfig(BaseModel):
+    """Uploader API configuration class."""
+    endpoint: str
+
+
 class Config(BaseModel):
     """Singleton configuration class."""
 
@@ -31,6 +37,7 @@ class Config(BaseModel):
     server: ServerConfig
     logging: LoggingConfig
     third_party_api: ThirdPartyAPIConfig
+    uploader_api: UploaderAPIConfig
 
     def __new__(cls, *args, **kwargs):
         """Singleton pattern enforcing on Config class creation."""
