@@ -4,7 +4,6 @@ import json
 from typing import ClassVar, Optional
 from pydantic import BaseModel
 
-
 class ServerConfig(BaseModel):
     """Server configuration class."""
     host: str

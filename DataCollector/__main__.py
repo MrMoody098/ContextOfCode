@@ -34,11 +34,11 @@ class Main:
                 serialized_data = snapshot.serialize()
                 logging.info(serialized_data)
                 self.data_queue.add_data(serialized_data)
-            time.sleep(5)
+            time.sleep(10)
 
 if __name__ == "__main__":
     setup_logger()
-    main = Main(device="device_123")
+    main = Main(device="CPU_Metrics")
 
     # Start the uploader service in a separate thread
     uploader_thread = threading.Thread(target=main.uploader_service.upload_data)
