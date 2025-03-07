@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass
 from typing import Optional
 
@@ -7,7 +8,7 @@ class DataSnapshot:
 
     device: str
     metric: str
-    timestamp: str
+    timestamp: datetime
     value: float
     unit: Optional[str] = None
 
