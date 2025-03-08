@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongoadmin:secret@localhost:27017/local?authSource=admin
+
+logging:
+  level:
+    org:
+      springframework:
+        data: debug
+    root: errors

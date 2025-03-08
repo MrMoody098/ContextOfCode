@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="93ef522f-666f-430b-a49c-e1a51248e016" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Controller/MetricController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/MetricApiApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Model/MetricEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Repository/MetricRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Service/MetricService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Service/MetricServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MetricApi_FrontEnd/MetricApi/src/main/java/com/MetricApi/MetricApi/Tools/PrettyPrintingMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/ContextOfCode.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/ContextOfCode.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DataCollector/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DataCollector/DataCollector.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/DataCollector.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DataCollector/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DataCollector/data/metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/data/metric.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DataCollector/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/../DataCollector/logs/app.log" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MrMoody098&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MrMoody098/ContextOfCode.git&quot;,
+    &quot;accountId&quot;: &quot;68d8faa6-41fc-40ec-b052-6e6d3063224e&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2tLxJG7RPlxOe8z5ptRE91mu2oF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.MoviesList.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ticta/CollageProjects/ContextOfCode/MetricMan&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.0.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ticta\CollageProjects\ContextOfCode\MetricMan\MetricApi_FrontEnd\MetricApi\src\main" />
+      <recent name="C:\Users\ticta\CollageProjects\ContextOfCode\MetricMan\MetricApi_FrontEnd\MetricApi\src\test\main\java" />
+      <recent name="C:\Users\ticta\CollageProjects\ContextOfCode\MetricMan\MetricApi_FrontEnd\MetricApi\src\test\main" />
+      <recent name="C:\Users\ticta\CollageProjects\ContextOfCode\MetricMan\MetricApi_FrontEnd\MetricApi\src\main\java" />
+      <recent name="C:\Users\ticta\CollageProjects\ContextOfCode\MetricMan\MetricApi_FrontEnd\MetricApi\src\test" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="93ef522f-666f-430b-a49c-e1a51248e016" name="Changes" comment="" />
+      <created>1740145082278</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740145082278</updated>
+      <workItem from="1740145083371" duration="9685000" />
+      <workItem from="1740162955377" duration="4375000" />
+      <workItem from="1740341687175" duration="811000" />
+      <workItem from="1740415201926" duration="1646000" />
+      <workItem from="1740748095131" duration="8102000" />
+      <workItem from="1741349640686" duration="1219000" />
+      <workItem from="1741359306766" duration="635000" />
+      <workItem from="1741369945189" duration="983000" />
+      <workItem from="1741371927052" duration="5642000" />
+      <workItem from="1741435282958" duration="8000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
