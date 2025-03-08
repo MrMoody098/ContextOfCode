@@ -20,3 +20,8 @@ class DataQueue:
             return data
         logger.info("Queue is empty")
         return None
+
+    def get_size(self):
+        size = self.queue.qsize()
+        logger.info(f"Current Queue size: {size}")
+        return size
