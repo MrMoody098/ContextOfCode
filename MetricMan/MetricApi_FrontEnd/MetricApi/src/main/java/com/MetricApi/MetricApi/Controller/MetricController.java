@@ -38,6 +38,12 @@ public class MetricController {
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<MetricEntity> createMetric(@RequestBody MetricEntity metricEntity) {
+        MetricEntity createdMetric = metricService.saveMetric(metricEntity);
+        return new ResponseEntity<>(createdMetric, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<MetricEntity> deleteMetricById(@PathVariable("id") String id){
         MetricEntity metric = metricService.deleteMetricById(id);
@@ -51,6 +57,13 @@ public class MetricController {
     }
 
     //FILTERING OPERATIONS
+    @GetMapping(value = "/recent/{device}")
+    public ResponseEntity<List<MetricEntity>> getRecentMetricsByDevice(
+            @PathVariable("device") String device) {
+        List<MetricEntity> metrics = metricService.findRecentMetricsByDevice(device);
+        return new ResponseEntity<>(metrics, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/recent/{device}/{metric}")
     public ResponseEntity<MetricEntity> getRecentMetricByDeviceAndMetric(
             @PathVariable("device") String device,

@@ -1,4 +1,4 @@
-# DataCollector/uploader_service.py
+# DataCollector/uploader/uploader_service.py
 import requests
 import time
 import logging
@@ -23,4 +23,4 @@ class UploaderService:
                     logger.error(f"Failed to upload data: {data}, error: {e}")
                     self.data_queue.add_data(data)  # Re-add data to queue for retry
                     logger.info(f"Queue size after re-adding data: {self.data_queue.get_size()}")
-            time.sleep(5)  # Wait before checking the queue again
+            time.sleep(1)  # Wait before checking the queue again

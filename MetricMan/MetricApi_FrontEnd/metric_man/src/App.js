@@ -1,6 +1,5 @@
 import './App.css';
-import MoviesList from './components/MoviesList';
-import NavBar from './components/NavBar.js';
+import CPUMetrics from "./components/CPUMetrics";
 
 function App() {
   return (
@@ -8,7 +7,8 @@ function App() {
       <header className="App-header">
       </header>
       <main>
-        <MoviesList />
+          <CPUMetrics />
+
       </main>
     </div>
   );

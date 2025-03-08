@@ -7,6 +7,7 @@ import requests
 
 from config import config
 from data.data_snapshot import DataSnapshot
+import GPUtil
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class Metric(ABC):
         return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
     @abstractmethod
-    def measure(self, device: str) -> DataSnapshot:
+    def measure(self):
         """Measure the metric."""
         if self.cache[self.DATA_INDEX] and self.cache[self.TIME_UPDATED_INDEX]:
             # Get time difference
@@ -56,15 +57,15 @@ class Metric(ABC):
 class CPUUtilization(Metric):
     """Class to measure the CPU utilisation."""
     UNIT: str = 'Percent'
-
-    def measure(self, device: str):
+    DEVICE: str = 'LocalPC'
+    def measure(self):
         """Measure the CPU Utilisation."""
-        if (cache := super().measure(device)):
+        if (cache := super().measure()):
             return cache
 
         value: float = psutil.cpu_percent(interval=1)
         data: DataSnapshot = DataSnapshot(
-            device=device,
+            device= self.DEVICE,
             metric=self.get_metric_type(),
             timestamp=self.get_timestamp(),
             value=value,
@@ -74,18 +75,50 @@ class CPUUtilization(Metric):
         self.cache = (data, self.get_timestamp())
         return data
 
-class CPUTimes(Metric):
-    """Class to measure cpu times in user mode."""
-    UNIT: str = 'Seconds'
+class GPUUtilization(Metric):
+    """Class to measure GPU utilization."""
+    UNIT: str = 'Percent'
+    DEVICE: str = 'LocalPC'
 
-    def measure(self, device: str) -> DataSnapshot:
-        """Measure the CPU user times."""
-        if (cache := super().measure(device)):
+    def measure(self) -> DataSnapshot:
+            """Measure the GPU utilization."""
+            if (cache := super().measure()):
+                return cache
+
+            # Use GPUtil to get GPU utilization
+            gpus = GPUtil.getGPUs()
+            if not gpus:
+                raise RuntimeError("No GPU found")
+            value: float = gpus[0].load * 100  # GPUtil returns load as a fraction
+            data: DataSnapshot = DataSnapshot(
+                device= self.DEVICE,
+                metric=self.get_metric_type(),
+                timestamp=self.get_timestamp(),
+                value=value,
+                unit=self.UNIT
+            )
+            logger.debug(data)
+            self.cache = (data, self.get_timestamp())
+            return data
+
+
+class GPUTemp(Metric):
+    """Class to measure GPU temperature."""
+    UNIT: str = 'Celsius'
+    DEVICE: str = 'LocalPC'
+
+    def measure(self) -> DataSnapshot:
+        """Measure the GPU temperature."""
+        if (cache := super().measure()):
             return cache
 
-        value: float = psutil.cpu_times().user
+        # Use GPUtil to get GPU temperature
+        gpus = GPUtil.getGPUs()
+        if not gpus:
+            raise RuntimeError("No GPU found")
+        value: float = gpus[0].temperature
         data: DataSnapshot = DataSnapshot(
-            device=device,
+            device=self.DEVICE,
             metric=self.get_metric_type(),
             timestamp=self.get_timestamp(),
             value=value,
@@ -99,21 +132,22 @@ class CPUTimes(Metric):
 class BTCPrice(Metric):
     """Class to measure the cryptocurrency price."""
     UNIT: str = 'USD'
+    DEVICE: str = 'CryptoAPI'
 
     def __init__(self, symbol: str):
         super().__init__()
         self.symbol = symbol
 
-    def measure(self, device: str) -> DataSnapshot:
+    def measure(self) -> DataSnapshot:
         """Measure the cryptocurrency price."""
-        if (cache := super().measure(device)):
+        if (cache := super().measure()):
             return cache
 
         url = f"http://api.coinlayer.com/live?access_key={config.third_party_api.url}&target=EUR&symbols={self.symbol}"
         response = requests.get(url)
         value: float = response.json()['rates'][self.symbol]
         data: DataSnapshot = DataSnapshot(
-            device=device,
+            device=self.DEVICE,
             metric=self.get_metric_type(),
             timestamp=self.get_timestamp(),
             value=value,
