@@ -64,5 +64,8 @@ public class MetricServiceImpl implements MetricService {
         return metricRepository.searchMetrics(device, metric, startDate, endDate, pageable);
     }
 
-
+    @Override
+    public List<MetricEntity> findMetricHistoryByDeviceAndMetric(String device, String metric){
+        return metricRepository.findByDeviceAndMetricOrderByTimestampAsc(device,metric);
+    }
 }

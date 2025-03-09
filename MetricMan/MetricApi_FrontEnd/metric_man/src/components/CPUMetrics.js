@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CompositionExample from './GaugeComponent';
 import './CPUMetrics.css';
+import GPUTemperature from './GPUTemperature';  // Import the GPUTemperature component
 
 const CPUMetrics = () => {
     const [cpuUtilization, setCpuUtilization] = useState(null);
@@ -64,12 +65,7 @@ const CPUMetrics = () => {
                 <div className="metric-card">
                     <h3>GPU Temperature</h3>
                     {gpuTemp !== null ? (
-                        <>
-                            <CompositionExample value={gpuTemp.value} />
-                            <p>Value: {gpuTemp.value}</p>
-                            <p>Timestamp: {gpuTemp.timestamp}</p>
-                            <p>Unit: {gpuTemp.unit}</p>
-                        </>
+                        <GPUTemperature temp={gpuTemp.value} />
                     ) : (
                         <p>Loading...</p>
                     )}

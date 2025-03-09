@@ -16,7 +16,9 @@ public interface MetricService {
     MetricEntity saveOrUpdateMetric(MetricEntity metric);
 
     //FILTERING OPERATIONS
+    List<MetricEntity> findMetricHistoryByDeviceAndMetric(String device, String metric);
     List<MetricEntity> findRecentMetricsByDevice(String device);
     MetricEntity findTopByDeviceAndMetricOrderByTimestampDesc(String device, String metric);
     Page<MetricEntity> searchMetrics(String device, String metric, Date startDate, Date endDate, Pageable pageable);
+
 }

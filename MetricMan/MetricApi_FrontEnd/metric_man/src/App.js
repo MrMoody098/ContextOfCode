@@ -6,6 +6,7 @@ import theme from './theme';
 import CPUMetrics from './components/CPUMetrics';
 import NavBar from './components/NavBar';
 import AllMetrics from './components/AllMetrics';
+import Visualise from "./components/Visualise";
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                 <Routes>
                     <Route path="/latest" element={<CPUMetrics />} />
                     <Route path="/all" element={<AllMetrics />} />
-                    <Route path="/visualize" element={<div>Visualize Component</div>} />
+                    <Route path="/visualize" element={<Visualise/>} />
                     <Route path="/" element={<CPUMetrics />} />
                 </Routes>
             </Router>

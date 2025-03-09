@@ -27,16 +27,23 @@ public class MetricController {
     private final MetricService metricService;
 
     @Autowired
-    public MetricController(MetricService metricService){
+    public MetricController(MetricService metricService) {
         this.metricService = metricService;
     }
 
     //BASIC CRUD OPERATIONS
     @GetMapping(value = "/{id}")
-    public ResponseEntity<MetricEntity> getMetricById(@PathVariable("id") String id){
+    public ResponseEntity<MetricEntity> getMetricById(@PathVariable("id") String id) {
         MetricEntity metric = metricService.findById(id);
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/history/device/metric/{device}/{metric}")
+    public ResponseEntity<List<MetricEntity>> getDeviceHistoryByMetric(@PathVariable("device") String device,
+            @PathVariable("metric") String metric) {
+        List<MetricEntity> metrics = metricService.findMetricHistoryByDeviceAndMetric(device, metric);
+        return new ResponseEntity<>(metrics,HttpStatus.OK);
+}
 
     @PostMapping
     public ResponseEntity<MetricEntity> createMetric(@RequestBody MetricEntity metricEntity) {
