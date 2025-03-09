@@ -24,7 +24,8 @@ public class MetricRepositoryCustomImpl implements MetricRepositoryCustom {
         List<Criteria> criteriaList = new ArrayList<>();
 
         if (device != null && !device.isEmpty()) {
-            criteriaList.add(Criteria.where("device").is(device));
+            Pattern pattern = Pattern.compile(device, Pattern.CASE_INSENSITIVE);
+            criteriaList.add(Criteria.where("device").regex(pattern));
         }
 
         if (metric != null && !metric.isEmpty()) {
