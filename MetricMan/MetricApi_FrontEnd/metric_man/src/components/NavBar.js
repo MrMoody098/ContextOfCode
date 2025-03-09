@@ -1,41 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import '../App.css';
+import React from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+}));
 
 const NavBar = () => {
-  const [show, setShow] = useState(true);
-  let lastScrollY = window.pageYOffset;
-
-  const handleScroll = () => {
-    const currentScrollY = window.pageYOffset;
-
-    if (lastScrollY > currentScrollY) {
-      setShow(true); // Scrolling up
-    } else {
-      setShow(false); // Scrolling down
-    }
-    lastScrollY = currentScrollY;
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  const classes = useStyles();
 
   return (
-    <div className={`navbar ${show ? 'visible' : 'hidden'}`}>
-      <div className="navbar-content">
-        <div className="logo">MetricMan</div>
-        <input type="text" className="search-bar" placeholder="Search..." />
-        <div className="nav-links">
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Metric Dashboard
+            </Typography>
+            <Button color="inherit">
+              <Link to="/latest" className={classes.link}>Latest</Link>
+            </Button>
+            <Button color="inherit">
+              <Link to="/all" className={classes.link}>All</Link>
+            </Button>
+            <Button color="inherit">
+              <Link to="/visualize" className={classes.link}>Visualize</Link>
+            </Button>
+          </Toolbar>
+        </AppBar>
       </div>
-    </div>
   );
 };
 

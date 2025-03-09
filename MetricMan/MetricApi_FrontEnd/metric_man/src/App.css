@@ -17,7 +17,7 @@ body {
     left: 0;
     width: 100%;
     height: 300px; /* Adjust the height as needed */
-    background: linear-gradient(to bottom, rgb(100, 0, 128), #000000);
+    /*background: linear-gradient(to bottom, rgb(100, 0, 128), #000000);*/
     z-index: -1; /* Ensure it is behind other content */
     transition: opacity 0.45s ease, transform 0.45s ease;
     opacity: 1;

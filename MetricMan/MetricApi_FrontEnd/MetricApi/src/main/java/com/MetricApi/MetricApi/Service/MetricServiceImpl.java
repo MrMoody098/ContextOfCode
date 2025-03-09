@@ -61,7 +61,8 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public Page<MetricEntity> searchMetrics(String device, String metric, Date startDate, Date endDate, Pageable pageable) {
-        return metricRepository.findByDeviceAndMetricAndTimestampBetween(device, metric, startDate, endDate, pageable);
+        return metricRepository.searchMetrics(device, metric, startDate, endDate, pageable);
     }
+
 
 }

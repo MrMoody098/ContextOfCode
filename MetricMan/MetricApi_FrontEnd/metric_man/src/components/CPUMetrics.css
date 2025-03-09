@@ -1,16 +1,22 @@
-.metric-card {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+.panel {
+    background-color: #1e1e1e; /* Darker panel background */
+    color: #ffffff; /* Light text color */
+    padding: 20px;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+}
+
+.metrics-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.metric-card {
+    background-color: #2e2e2e; /* Darker card background */
+    color: #ffffff; /* Light text color */
     padding: 16px;
-    margin: 16px 0;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.metric-card h3 {
-    margin-top: 0;
-}
-
-.metric-card p {
-    margin: 4px 0;
 }
