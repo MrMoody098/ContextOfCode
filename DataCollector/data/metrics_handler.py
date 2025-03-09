@@ -1,14 +1,13 @@
 import logging
 from data.data_snapshot import DataSnapshot
-from .metric import Metric
+from data.metric import Metric
 
 logger = logging.getLogger(__name__)
 
 class Metrics:
-    def __init__(self, device: str):
-        self.device: str = device
+    def __init__(self):
         self.metrics: set[Metric] = set()
-        logger.info(f"Metrics initialized for device: {device}")
+        logger.info("Metrics initialized")
 
     def add_metric(self, metric: Metric):
         self.metrics.add(metric)
@@ -24,7 +23,7 @@ class Metrics:
     def measure_metrics(self) -> list[DataSnapshot]:
         list_data = []
         for metric in self.metrics:
-            data = metric.measure(self.device)
+            data = metric.measure()
             list_data.append(data)
             logger.info(f"Measured metric: {metric.get_metric_type()} with data: {data.serialize()}")
         return list_data
@@ -32,6 +31,6 @@ class Metrics:
     def measure_metric(self, metric_type: str) -> DataSnapshot:
         for metric in self.metrics:
             if metric.get_metric_type() == metric_type.lower():
-                data: DataSnapshot = metric.measure(self.device)
+                data: DataSnapshot = metric.measure()
                 logger.info(f"Measured specific metric: {metric_type} with data: {data.serialize()}")
                 return data

@@ -38,6 +38,12 @@ public class MetricController {
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<MetricEntity> createMetric(@RequestBody MetricEntity metricEntity) {
+        MetricEntity createdMetric = metricService.saveMetric(metricEntity);
+        return new ResponseEntity<>(createdMetric, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<MetricEntity> deleteMetricById(@PathVariable("id") String id){
         MetricEntity metric = metricService.deleteMetricById(id);
@@ -51,6 +57,13 @@ public class MetricController {
     }
 
     //FILTERING OPERATIONS
+    @GetMapping(value = "/recent/{device}")
+    public ResponseEntity<List<MetricEntity>> getRecentMetricsByDevice(
+            @PathVariable("device") String device) {
+        List<MetricEntity> metrics = metricService.findRecentMetricsByDevice(device);
+        return new ResponseEntity<>(metrics, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/recent/{device}/{metric}")
     public ResponseEntity<MetricEntity> getRecentMetricByDeviceAndMetric(
             @PathVariable("device") String device,
@@ -63,8 +76,8 @@ public class MetricController {
     public ResponseEntity<Page<MetricEntity>> searchMetrics(
             @RequestParam(required = false) String device,
             @RequestParam(required = false) String metric,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "timestamp") String sortBy,

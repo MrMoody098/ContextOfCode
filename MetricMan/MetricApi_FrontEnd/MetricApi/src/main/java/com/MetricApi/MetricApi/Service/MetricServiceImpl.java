@@ -23,6 +23,10 @@ public class MetricServiceImpl implements MetricService {
         return metric.orElse(null);
     }
 
+    public MetricEntity saveMetric(MetricEntity metricEntity) {
+        return metricRepository.save(metricEntity);
+    }
+
     @Override
     public MetricEntity deleteMetricById(String id) {
         MetricEntity metric = findById(id);
@@ -43,6 +47,13 @@ public class MetricServiceImpl implements MetricService {
     }
 
     //FILTERING OPERATIONS
+    //used for returning a list of recent metrics for a specific device
+    @Override
+    public List<MetricEntity> findRecentMetricsByDevice(String device) {
+        return metricRepository.findRecentMetricsByDevice(device);
+    }
+
+    //used for returning the most recent metric for a specific metric and device
     @Override
     public MetricEntity findTopByDeviceAndMetricOrderByTimestampDesc(String device, String metric) {
         return metricRepository.findTopByDeviceAndMetricOrderByTimestampDesc(device, metric);
@@ -50,6 +61,8 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public Page<MetricEntity> searchMetrics(String device, String metric, Date startDate, Date endDate, Pageable pageable) {
-        return metricRepository.findByDeviceAndMetricAndTimestampBetween(device, metric, startDate, endDate, pageable);
+        return metricRepository.searchMetrics(device, metric, startDate, endDate, pageable);
     }
+
+
 }

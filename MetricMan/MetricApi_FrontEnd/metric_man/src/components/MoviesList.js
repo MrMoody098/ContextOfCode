@@ -7,7 +7,7 @@ const MoviesList = () => {
   const [metrics, setMetrics] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8081/metrics/latest')
+    axios.get('http://localhost:8081/metrics/all')
         .then(response => {
           console.log('Metrics fetched:', response.data);
           setMetrics(response.data);
@@ -21,15 +21,15 @@ const MoviesList = () => {
       <div>
         <NavBar />
         <div className="metrics-container">
-          {metrics.map(metric => (
-              <div className="metric-card" key={metric.id}>
-                <h2>Device: {metric.device}</h2>
-                <p>Metric: {metric.metric}</p>
-                <p>Timestamp: {metric.timestamp}</p>
-                <p>Value: {metric.value}</p>
-                <p>Unit: {metric.unit}</p>
-              </div>
-          ))}
+          {/*{metrics.map(metric => (*/}
+          {/*    <div className="metric-card" key={metric.id}>*/}
+          {/*      <h2>Device: {metric.device}</h2>*/}
+          {/*      <p>Metric: {metric.metric}</p>*/}
+          {/*      <p>Timestamp: {metric.timestamp}</p>*/}
+          {/*      <p>Value: {metric.value}</p>*/}
+          {/*      <p>Unit: {metric.unit}</p>*/}
+          {/*    </div>*/}
+          {/*))}*/}
         </div>
       </div>
   );
