@@ -39,11 +39,16 @@ public class MetricController {
     }
 
     @GetMapping(value = "/history/device/metric/{device}/{metric}")
-    public ResponseEntity<List<MetricEntity>> getDeviceHistoryByMetric(@PathVariable("device") String device,
-            @PathVariable("metric") String metric) {
-        List<MetricEntity> metrics = metricService.findMetricHistoryByDeviceAndMetric(device, metric);
-        return new ResponseEntity<>(metrics,HttpStatus.OK);
-}
+    public ResponseEntity<List<MetricEntity>> getDeviceHistoryByMetric(
+            @PathVariable("device") String device,
+            @PathVariable("metric") String metric,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+        List<MetricEntity> metrics = metricService.findMetricHistoryByDeviceAndMetric(device, metric, startDate, endDate);
+        return new ResponseEntity<>(metrics, HttpStatus.OK);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<MetricEntity> createMetric(@RequestBody MetricEntity metricEntity) {

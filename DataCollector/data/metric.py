@@ -131,31 +131,57 @@ class GPUTemp(Metric):
 
 class BTCPrice(Metric):
     """Class to measure the cryptocurrency price."""
-    UNIT: str = 'USD'
+    UNIT: str = 'EUR'  # This is the target currency, e.g., EUR
     DEVICE: str = 'CryptoAPI'
 
     def __init__(self, symbol: str):
         super().__init__()
-        self.symbol = symbol
+        self.symbol = symbol  # The symbol (e.g., 'BTC', 'SOL')
 
     def measure(self) -> DataSnapshot:
         """Measure the cryptocurrency price."""
         if (cache := super().measure()):
             return cache
 
-        url = f"http://api.coinlayer.com/live?access_key={config.third_party_api.url}&target=EUR&symbols={self.symbol}"
+        # Dynamically build the URL based on the UNIT (target) and symbol
+        url = f"{config.third_party_api.url}&target={self.UNIT}&symbols={self.symbol}"
         response = requests.get(url)
-        value: float = response.json()['rates'][self.symbol]
-        data: DataSnapshot = DataSnapshot(
-            device=self.DEVICE,
-            metric=self.get_metric_type(),
-            timestamp=self.get_timestamp(),
-            value=value,
-            unit=self.UNIT
-        )
-        logger.debug(data)
-        self.cache = (data, self.get_timestamp())
-        return data
+
+        # Check if the request was successful
+        if response.status_code != 200:
+            logger.error(f"API request failed with status code {response.status_code}")
+            return None
+
+        try:
+            data = response.json()
+            # Check if the 'rates' key is in the response
+            if 'rates' not in data:
+                logger.error("Missing 'rates' key in API response.")
+                return None
+
+            # Access the price for the specified symbol
+            value = data['rates'].get(self.symbol)
+            if value is None:
+                logger.error(f"Price for {self.symbol} not found in 'rates'.")
+                return None
+
+            # Create and return the DataSnapshot object
+            snapshot = DataSnapshot(
+                device=self.DEVICE,
+                metric=self.get_metric_type(),
+                timestamp=self.get_timestamp(),
+                value=value,
+                unit=self.UNIT
+            )
+            logger.debug(snapshot)
+            self.cache = (snapshot, self.get_timestamp())
+            return snapshot
+
+        except ValueError as e:
+            logger.error(f"Error parsing JSON response: {e}")
+            return None
+
+
 
 class SOLPrice(BTCPrice):
     """Class to measure the SOL price."""

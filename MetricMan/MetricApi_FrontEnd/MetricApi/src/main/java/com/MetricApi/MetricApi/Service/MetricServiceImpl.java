@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Collections;
 
 @Service
 public class MetricServiceImpl implements MetricService {
@@ -64,8 +66,34 @@ public class MetricServiceImpl implements MetricService {
         return metricRepository.searchMetrics(device, metric, startDate, endDate, pageable);
     }
 
-    @Override
-    public List<MetricEntity> findMetricHistoryByDeviceAndMetric(String device, String metric){
-        return metricRepository.findByDeviceAndMetricOrderByTimestampAsc(device,metric);
+    public List<MetricEntity> findMetricHistoryByDeviceAndMetric(
+            String device, String metric, Date startDate, Date endDate) {
+
+        // Get the first and last metrics for the given device and metric
+        MetricEntity firstMetric = metricRepository.findTopByDeviceAndMetricOrderByTimestampAsc(device, metric);
+        MetricEntity lastMetric = metricRepository.findTopByDeviceAndMetricOrderByTimestampDesc(device, metric);
+
+        // If no metrics are found, return an empty list or handle the situation accordingly
+        if (firstMetric == null || lastMetric == null) {
+            return List.of();  // or some other response indicating no data
+        }
+
+        // Use the timestamps from the first and last metrics to get the range
+        Date firstTimestamp = firstMetric.getTimestamp();
+        Date lastTimestamp = lastMetric.getTimestamp();
+
+        // If no start or end date is provided, use the first and last metric timestamps
+        if (startDate == null) {
+            startDate = firstTimestamp;
+        }
+        if (endDate == null) {
+            endDate = lastTimestamp;
+        }
+
+        // Fetch the metrics within the specified date range
+        return metricRepository.findByDeviceAndMetricAndTimestampBetweenOrderByTimestampAsc(
+                device, metric, startDate, endDate);
     }
+
+
 }

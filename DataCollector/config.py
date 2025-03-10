@@ -26,6 +26,9 @@ class UploaderAPIConfig(BaseModel):
     """Uploader API configuration class."""
     endpoint: str
 
+class SpotifyConfig(BaseModel):
+    """Spotify configuration class"""
+    path: str
 
 class Config(BaseModel):
     """Singleton configuration class."""
@@ -37,6 +40,7 @@ class Config(BaseModel):
     logging: LoggingConfig
     third_party_api: ThirdPartyAPIConfig
     uploader_api: UploaderAPIConfig
+    spotify: SpotifyConfig
 
     def __new__(cls, *args, **kwargs):
         """Singleton pattern enforcing on Config class creation."""
@@ -47,7 +51,7 @@ class Config(BaseModel):
         # Else, return the existing instance
         return cls._instance
 
-    def __init__(self, filepath: str = "config.json"):
+    def __init__(self, filepath: str = "./config.json"):
         """Load the configuration from a JSON file."""
 
         # Load the JSON config file

@@ -11,10 +11,13 @@
     "file_path": "logs/app.log"
   },
   "third_party_api": {
-    "url": "http://api.coinlayer.com/live?access_key=0cfad9715a7faebfb73c5dbb5e93fd8c&target=EUR&symbols=BTC,SOL,XMR",
+    "url": "http://api.coinlayer.com/live?access_key=0cfad9715a7faebfb73c5dbb5e93fd8c",
     "cache_timeout_m": 0.1
   },
   "uploader_api": {
     "endpoint": "http://localhost:8081/metrics"
+  },
+  "spotify": {
+    "path": "C:\\Users\\ticta\\AppData\\Roaming\\Spotify\\Spotify.exe"
   }
 }
