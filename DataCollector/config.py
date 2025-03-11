@@ -26,6 +26,9 @@ class UploaderAPIConfig(BaseModel):
     """Uploader API configuration class."""
     endpoint: str
 
+class CommandAPIConfig(BaseModel):
+    endpoint: str
+
 class SpotifyConfig(BaseModel):
     """Spotify configuration class"""
     path: str
@@ -40,6 +43,7 @@ class Config(BaseModel):
     logging: LoggingConfig
     third_party_api: ThirdPartyAPIConfig
     uploader_api: UploaderAPIConfig
+    command_api: CommandAPIConfig
     spotify: SpotifyConfig
 
     def __new__(cls, *args, **kwargs):
