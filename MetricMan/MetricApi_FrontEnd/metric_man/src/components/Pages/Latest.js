@@ -25,11 +25,23 @@ const Latest = () => {
             }
         };
 
-        fetchData('http://localhost:8081/metrics/recent/LocalPC/cpuutilization', setCpuUtilization);
-        fetchData('http://localhost:8081/metrics/recent/LocalPC/gpuutilization', setGpuUtilization);
-        fetchData('http://localhost:8081/metrics/recent/LocalPC/gputemp', setGpuTemp);
-        fetchData('http://localhost:8081/metrics/recent/CryptoAPI/btcprice', setBtcPrice);
-        fetchData('http://localhost:8081/metrics/recent/CryptoAPI/solprice', setSolPrice);
+        // Create a function to update all metrics
+        const updateMetrics = () => {
+            fetchData('http://localhost:8081/metrics/recent/LocalPC/cpuutilization', setCpuUtilization);
+            fetchData('http://localhost:8081/metrics/recent/LocalPC/gpuutilization', setGpuUtilization);
+            fetchData('http://localhost:8081/metrics/recent/LocalPC/gputemp', setGpuTemp);
+            fetchData('http://localhost:8081/metrics/recent/CryptoAPI/btcprice', setBtcPrice);
+            fetchData('http://localhost:8081/metrics/recent/CryptoAPI/solprice', setSolPrice);
+        };
+
+        // Fetch initially
+        updateMetrics();
+
+        // Set up polling every 15 seconds
+        const intervalId = setInterval(updateMetrics, 15000);
+
+        // Cleanup interval on unmount
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -39,7 +51,7 @@ const Latest = () => {
                 {/* LocalPC Metrics */}
                 <div className="metric-card">
                     <h3>CPU Utilization</h3>
-                    {cpuUtilization !== null ? (
+                    {cpuUtilization ? (
                         <>
                             <CompositionExample value={cpuUtilization.value} />
                             <p>Value: {cpuUtilization.value}</p>
@@ -52,7 +64,7 @@ const Latest = () => {
                 </div>
                 <div className="metric-card">
                     <h3>GPU Utilization</h3>
-                    {gpuUtilization !== null ? (
+                    {gpuUtilization ? (
                         <>
                             <CompositionExample value={gpuUtilization.value} />
                             <p>Value: {gpuUtilization.value}</p>
@@ -65,7 +77,7 @@ const Latest = () => {
                 </div>
                 <div className="metric-card">
                     <h3>GPU Temperature</h3>
-                    {gpuTemp !== null ? (
+                    {gpuTemp ? (
                         <>
                             <GPUTemperature temp={gpuTemp.value} />
                             <p>Timestamp: {formatTimestamp(gpuTemp.timestamp)}</p>
@@ -79,7 +91,7 @@ const Latest = () => {
                 {/* CryptoAPI Metrics */}
                 <div className="metric-card price-card">
                     <h3>Bitcoin Price</h3>
-                    {btcPrice !== null ? (
+                    {btcPrice ? (
                         <>
                             <p className="price">&euro;{btcPrice.value.toFixed(2)}</p>
                             <p>Timestamp: {formatTimestamp(btcPrice.timestamp)}</p>
@@ -91,7 +103,7 @@ const Latest = () => {
                 </div>
                 <div className="metric-card price-card">
                     <h3>Solana Price</h3>
-                    {solPrice !== null ? (
+                    {solPrice ? (
                         <>
                             <p className="price">&euro;{solPrice.value.toFixed(2)}</p>
                             <p>Timestamp: {formatTimestamp(solPrice.timestamp)}</p>

@@ -5,6 +5,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongoadmin:secret@localhost:27017/local?authSource=admin
+  jackson:
+    time-zone: UTC
 
 logging:
   level:

@@ -1,13 +1,14 @@
-"""Metrics module. Collects data from the device and serializes the data"""
+"""Metrics module. Collects data from the device and serializes the data."""
 from abc import abstractmethod, ABC
 import datetime
 import psutil
 import logging
 import requests
+import yfinance as yf
+import GPUtil
 
 from config import config
 from data.data_snapshot import DataSnapshot
-import GPUtil
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ class Metric(ABC):
 
     def get_timestamp(self):
         """Return the current time in ISO 8601 format with timezone."""
-        return datetime.datetime.now(datetime.timezone.utc).isoformat()
+        return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='milliseconds')
 
     @abstractmethod
     def measure(self):
@@ -54,18 +55,20 @@ class Metric(ABC):
                 logger.debug('Cache expired')
                 return None
 
+
 class CPUUtilization(Metric):
-    """Class to measure the CPU utilisation."""
+    """Class to measure the CPU utilization."""
     UNIT: str = 'Percent'
     DEVICE: str = 'LocalPC'
+
     def measure(self):
-        """Measure the CPU Utilisation."""
+        """Measure the CPU Utilization."""
         if (cache := super().measure()):
             return cache
 
         value: float = psutil.cpu_percent(interval=1)
         data: DataSnapshot = DataSnapshot(
-            device= self.DEVICE,
+            device=self.DEVICE,
             metric=self.get_metric_type(),
             timestamp=self.get_timestamp(),
             value=value,
@@ -75,31 +78,32 @@ class CPUUtilization(Metric):
         self.cache = (data, self.get_timestamp())
         return data
 
+
 class GPUUtilization(Metric):
     """Class to measure GPU utilization."""
     UNIT: str = 'Percent'
     DEVICE: str = 'LocalPC'
 
     def measure(self) -> DataSnapshot:
-            """Measure the GPU utilization."""
-            if (cache := super().measure()):
-                return cache
+        """Measure the GPU utilization."""
+        if (cache := super().measure()):
+            return cache
 
-            # Use GPUtil to get GPU utilization
-            gpus = GPUtil.getGPUs()
-            if not gpus:
-                raise RuntimeError("No GPU found")
-            value: float = gpus[0].load * 100  # GPUtil returns load as a fraction
-            data: DataSnapshot = DataSnapshot(
-                device= self.DEVICE,
-                metric=self.get_metric_type(),
-                timestamp=self.get_timestamp(),
-                value=value,
-                unit=self.UNIT
-            )
-            logger.debug(data)
-            self.cache = (data, self.get_timestamp())
-            return data
+        # Use GPUtil to get GPU utilization
+        gpus = GPUtil.getGPUs()
+        if not gpus:
+            raise RuntimeError("No GPU found")
+        value: float = gpus[0].load * 100  # GPUtil returns load as a fraction
+        data: DataSnapshot = DataSnapshot(
+            device=self.DEVICE,
+            metric=self.get_metric_type(),
+            timestamp=self.get_timestamp(),
+            value=value,
+            unit=self.UNIT
+        )
+        logger.debug(data)
+        self.cache = (data, self.get_timestamp())
+        return data
 
 
 class GPUTemp(Metric):
@@ -130,7 +134,7 @@ class GPUTemp(Metric):
 
 
 class BTCPrice(Metric):
-    """Class to measure the cryptocurrency price."""
+    """Class to measure the cryptocurrency price using yfinance."""
     UNIT: str = 'EUR'  # This is the target currency, e.g., EUR
     DEVICE: str = 'CryptoAPI'
 
@@ -139,48 +143,37 @@ class BTCPrice(Metric):
         self.symbol = symbol  # The symbol (e.g., 'BTC', 'SOL')
 
     def measure(self) -> DataSnapshot:
-        """Measure the cryptocurrency price."""
+        """Measure the cryptocurrency price using yfinance."""
         if (cache := super().measure()):
             return cache
 
-        # Dynamically build the URL based on the UNIT (target) and symbol
-        url = f"{config.third_party_api.url}&target={self.UNIT}&symbols={self.symbol}"
-        response = requests.get(url)
-
-        # Check if the request was successful
-        if response.status_code != 200:
-            logger.error(f"API request failed with status code {response.status_code}")
-            return None
-
+        # Fetch data using yfinance
         try:
-            data = response.json()
-            # Check if the 'rates' key is in the response
-            if 'rates' not in data:
-                logger.error("Missing 'rates' key in API response.")
+            ticker = yf.Ticker(self.symbol + '-EUR')  # Get the ticker for the pair (e.g., 'BTC-EUR')
+            info = ticker.info
+
+            # Get the current price directly
+            if 'regularMarketPrice' not in info:
+                logger.error(f"Price data not available for {self.symbol}")
                 return None
 
-            # Access the price for the specified symbol
-            value = data['rates'].get(self.symbol)
-            if value is None:
-                logger.error(f"Price for {self.symbol} not found in 'rates'.")
-                return None
+            latest_price = info['regularMarketPrice']
 
             # Create and return the DataSnapshot object
             snapshot = DataSnapshot(
                 device=self.DEVICE,
                 metric=self.get_metric_type(),
                 timestamp=self.get_timestamp(),
-                value=value,
+                value=latest_price,
                 unit=self.UNIT
             )
             logger.debug(snapshot)
             self.cache = (snapshot, self.get_timestamp())
             return snapshot
 
-        except ValueError as e:
-            logger.error(f"Error parsing JSON response: {e}")
+        except Exception as e:
+            logger.error(f"Error fetching price data for {self.symbol}: {e}")
             return None
-
 
 
 class SOLPrice(BTCPrice):

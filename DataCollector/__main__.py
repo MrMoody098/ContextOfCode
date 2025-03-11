@@ -1,5 +1,4 @@
 import logging
-import sys
 import time
 from data.metrics_handler import Metrics
 from data.metric import CPUUtilization, BTCPrice, SOLPrice, GPUTemp, GPUUtilization
@@ -16,15 +15,18 @@ class Main:
         # Use config values to initialize components
         self.metrics = Metrics()
         self.data_queue = DataQueue(cache_file='data_queue_cache.pkl')
-        self.uploader_service = UploaderService(self.data_queue, config.uploader_api.endpoint)
-        self.setup_metrics()
-        logging.info("Main initialized")
 
         # Configure the WebSocketHandler using config values
-        self.websocket_handler = WebSocketHandler(host=config.server.host, port=config.server.port)
+        self.websocket_handler = WebSocketHandler()
 
         # Start the WebSocket server in a separate thread to allow the main program to continue running
         threading.Thread(target=self.websocket_handler.start_server, daemon=True).start()
+
+        # Now initialize the UploaderService with the websocket_handler
+        self.uploader_service = UploaderService(self.data_queue, config.uploader_api.endpoint)
+
+        self.setup_metrics()
+        logging.info("Main initialized")
 
     def setup_metrics(self):
         self.metrics.add_metric(CPUUtilization())
@@ -44,7 +46,7 @@ class Main:
                     self.data_queue.add_data(serialized_data)
                 else:
                     logging.error("Received None as snapshot, skipping serialization.")
-            time.sleep(10)
+            time.sleep(15)
 
 
 if __name__ == "__main__":

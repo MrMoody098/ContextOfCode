@@ -16,35 +16,35 @@ const AllMetrics = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalElements, setTotalElements] = useState(0);
 
-    const formatTimestamp = (timestamp) => {
-        return new Date(timestamp).toLocaleString();
+    const formatTimestamp = (timestamp) => new Date(timestamp).toLocaleString();
+
+    const fetchMetrics = async () => {
+        try {
+            const params = new URLSearchParams({
+                page,
+                size: rowsPerPage,
+                sortBy: orderBy,
+                sortDir: order,
+                device: filter,
+                metric: searchTerm
+            });
+
+            if (startDate) params.append('startDate', new Date(startDate).toISOString());
+            if (endDate) params.append('endDate', new Date(endDate).toISOString());
+
+            const response = await fetch(`http://localhost:8081/metrics/search?${params.toString()}`);
+            const data = await response.json();
+            setMetrics(data.content);
+            setTotalElements(data.totalElements);
+        } catch (error) {
+            console.error('Error fetching metrics:', error);
+        }
     };
 
     useEffect(() => {
-        const fetchMetrics = async () => {
-            try {
-                const params = new URLSearchParams({
-                    page,
-                    size: rowsPerPage,
-                    sortBy: orderBy,
-                    sortDir: order,
-                    device: filter,
-                    metric: searchTerm
-                });
-
-                if (startDate) params.append('startDate', new Date(startDate).toISOString());
-                if (endDate) params.append('endDate', new Date(endDate).toISOString());
-
-                const response = await fetch(`http://localhost:8081/metrics/search?${params.toString()}`);
-                const data = await response.json();
-                setMetrics(data.content);
-                setTotalElements(data.totalElements);
-            } catch (error) {
-                console.error('Error fetching metrics:', error);
-            }
-        };
-
         fetchMetrics();
+        const interval = setInterval(fetchMetrics, 15000); // Fetch every 15 seconds
+        return () => clearInterval(interval);
     }, [order, orderBy, page, rowsPerPage, searchTerm, filter, startDate, endDate]);
 
     const handleSearchChange = (event) => setSearchTerm(event.target.value);
@@ -66,18 +66,8 @@ const AllMetrics = () => {
                 <TextField label="Search Metric" variant="outlined" value={searchTerm} onChange={handleSearchChange} style={{ marginRight: '20px' }} />
                 <TextField label="Filter by Device" variant="outlined" value={filter} onChange={handleFilterChange} style={{ marginRight: '20px' }} />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Start Date"
-                        value={startDate}
-                        onChange={(newValue) => setStartDate(newValue)}
-                        renderInput={(params) => <TextField {...params} style={{ marginRight: '20px' }} />}
-                    />
-                    <DatePicker
-                        label="End Date"
-                        value={endDate}
-                        onChange={(newValue) => setEndDate(newValue)}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
+                    <DatePicker label="Start Date" value={startDate} onChange={setStartDate} renderInput={(params) => <TextField {...params} style={{ marginRight: '20px' }} />} />
+                    <DatePicker label="End Date" value={endDate} onChange={setEndDate} renderInput={(params) => <TextField {...params} />} />
                 </LocalizationProvider>
             </div>
             <TableContainer component={Paper} elevation={3}>

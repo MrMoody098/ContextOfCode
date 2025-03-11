@@ -28,7 +28,7 @@ const GPUTemperature = ({ temp }) => {
     }, [temp]);
 
     return (
-        <Card sx={{ minWidth: 275, backgroundColor: '#2e2e2e', color: 'white', borderRadius: 2, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
+        <Card sx={{ width: '100%', maxWidth: 300, backgroundColor: '#2e2e2e', color: 'white', borderRadius: 2, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
             <CardContent>
                 <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
                     <DeviceThermostat sx={{ marginRight: 1 }} fontSize="small" />

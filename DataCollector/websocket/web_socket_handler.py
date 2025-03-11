@@ -4,24 +4,11 @@ import logging
 import subprocess
 from config import config
 
-# Configure logging based on the config
-def setup_logging():
-    logging.basicConfig(
-        level=config.logging.level,
-        format=config.logging.format,
-        handlers=[
-            logging.StreamHandler(),
-            logging.FileHandler(config.logging.file_path)
-        ]
-    )
-
-setup_logging()
-
 class WebSocketHandler:
-    def __init__(self, host=config.server.host, port=config.server.port, path=config.spotify.path):
-        self.host = host
-        self.port = port
-        self.spotify_path = path  # Get Spotify path from the config
+    def __init__(self):
+        self.host = config.server.host
+        self.port = config.server.port
+        self.spotify_path = config.spotify.path  # Get Spotify path from the config
 
     async def handle_connection(self, websocket):
         logging.info(f"Connection opened from {websocket.remote_address}")

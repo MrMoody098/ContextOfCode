@@ -1,27 +1,19 @@
 package com.MetricApi.MetricApi.Repository;
 
 import com.MetricApi.MetricApi.Model.MetricEntity;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.DateOperators;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationSpELExpression;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.regex.Pattern;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Repository
 public class MetricRepositoryCustomImpl implements MetricRepositoryCustom {
@@ -30,7 +22,7 @@ public class MetricRepositoryCustomImpl implements MetricRepositoryCustom {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public Page<MetricEntity> searchMetrics(String device, String metric, Date startDate, Date endDate, Pageable pageable) {
+    public Page<MetricEntity> searchMetrics(String device, String metric, Instant startDate, Instant endDate, Pageable pageable) {
         Query query = new Query();
         List<Criteria> criteriaList = new ArrayList<>();
 
@@ -40,9 +32,7 @@ public class MetricRepositoryCustomImpl implements MetricRepositoryCustom {
         }
 
         if (metric != null && !metric.isEmpty()) {
-            // Trim the metric value and compile a case-insensitive regex pattern.
-            metric = metric.trim();
-            Pattern pattern = Pattern.compile(metric, Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(metric.trim(), Pattern.CASE_INSENSITIVE);
             criteriaList.add(Criteria.where("metric").regex(pattern));
         }
 
@@ -55,24 +45,17 @@ public class MetricRepositoryCustomImpl implements MetricRepositoryCustom {
         }
 
         if (!criteriaList.isEmpty()) {
-            // If only one criterion is present, add it directly.
-            if (criteriaList.size() == 1) {
-                query.addCriteria(criteriaList.get(0));
-            } else {
-                Criteria criteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
-                query.addCriteria(criteria);
-            }
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
         }
 
-        // Log the constructed query for debugging.
+        // Log the constructed query for debugging
         System.out.println("Constructed Query: " + query.getQueryObject().toJson());
 
-        // Apply pagination and sorting from the pageable parameter.
+        // Apply pagination and sorting from the pageable parameter
         query.with(pageable);
 
         List<MetricEntity> list = mongoTemplate.find(query, MetricEntity.class);
-        // For total count, reset paging options.
-        long count = mongoTemplate.count(query.skip(0).limit(0), MetricEntity.class);
+        long count = mongoTemplate.count(Query.of(query).limit(0).skip(0), MetricEntity.class);
 
         return new PageImpl<>(list, pageable, count);
     }
