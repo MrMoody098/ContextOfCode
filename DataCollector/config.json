@@ -17,6 +17,9 @@
   "uploader_api": {
     "endpoint": "http://localhost:8081/metrics"
   },
+  "command_api": {
+    "endpoint": "http://localhost:8081/api/commands"
+  },
   "spotify": {
     "path": "C:\\Users\\ticta\\AppData\\Roaming\\Spotify\\Spotify.exe"
   }

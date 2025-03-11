@@ -22,24 +22,17 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = () => {
   const classes = useStyles();
-  const [status, setStatus] = useState('');
-
-  // Function to connect to WebSocket and open Spotify
-  const openSpotify = () => {
-    const socket = new WebSocket('ws://localhost:5000');
-    socket.onopen = () => {
-      console.log('WebSocket connection established');
-      socket.send('open_spotify');
-    };
-    socket.onmessage = (event) => {
-      setStatus(event.data);
-    };
-    socket.onerror = (error) => {
-      console.log('WebSocket error: ', error);
-    };
-    socket.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
+  // Function to send a command via REST API
+  const openSpotify = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/api/commands/send-command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command: 'open_spotify' }),
+      });
+    } catch (error) {
+      console.error('Error sending command:', error);
+    }
   };
 
   return (
@@ -66,7 +59,6 @@ const NavBar = () => {
             </Button>
           </Toolbar>
         </AppBar>
-        {status && <div>{status}</div>}
       </div>
   );
 };

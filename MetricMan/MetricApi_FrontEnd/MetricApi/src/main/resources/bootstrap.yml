@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongoadmin:secret@localhost:27017/local?authSource=admin
+      uri: mongodb+srv://danielmoody098:BananaFish105647@metricscluster.a2imx.mongodb.net/**metricsDB**?retryWrites=true&w=majority&appName=MetricsCluster
   jackson:
     time-zone: UTC
 
