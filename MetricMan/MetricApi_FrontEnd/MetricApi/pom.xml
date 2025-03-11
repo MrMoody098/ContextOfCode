@@ -8,10 +8,10 @@
 		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.MovieMan</groupId>
-	<artifactId>MovieMan</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>MetricMan</name>
+	<groupId>com.MetricApi</groupId>
+	<artifactId>MetricApi</artifactId>
+	<version>1.2.5-SNAPSHOT</version>
+	<name>MetricApi</name>
 	<description>Api for aggregating PC and Crypto metrics from a local collector agent </description>
 	<url/>
 	<licenses>

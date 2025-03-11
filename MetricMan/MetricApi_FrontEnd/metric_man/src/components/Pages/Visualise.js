@@ -18,7 +18,7 @@ const Visualise = () => {
     const fetchData = async () => {
         setLoading(true);
         const fetchMetricData = async (metricType, device) => {
-            let url = `http://localhost:8081/metrics/history/device/metric/${device}/${metricType}`;
+            let url = `http://13.60.250.142:8081/metrics/history/device/metric/${device}/${metricType}`;
             if (startDate && endDate) {
                 url += `?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
             }
@@ -40,7 +40,7 @@ const Visualise = () => {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 15000);
+        const interval = setInterval(fetchData, 30000);
         return () => clearInterval(interval);
     }, [startDate, endDate]);
 
