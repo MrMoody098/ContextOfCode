@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,24 +16,24 @@ public class MetricServiceImpl implements MetricService {
     @Autowired
     private MetricRepository metricRepository;
 
-    //BASIC CRUD OPERATIONS
+    // BASIC CRUD OPERATIONS
     @Override
-    public MetricEntity findById(String id) {
-        Optional<MetricEntity> metric = metricRepository.findById(id);
-        return metric.orElse(null);
+    public Optional<MetricEntity> findById(String id) {
+        return metricRepository.findById(id);
     }
 
+    @Override
     public MetricEntity saveMetric(MetricEntity metricEntity) {
         return metricRepository.save(metricEntity);
     }
 
     @Override
-    public MetricEntity deleteMetricById(String id) {
-        MetricEntity metric = findById(id);
-        if (metric != null) {
+    public boolean deleteMetricById(String id) {
+        if (metricRepository.existsById(id)) {
             metricRepository.deleteById(id);
+            return true;
         }
-        return metric;
+        return false;
     }
 
     @Override
@@ -46,23 +46,41 @@ public class MetricServiceImpl implements MetricService {
         return metricRepository.save(metric);
     }
 
-    //FILTERING OPERATIONS
-    //used for returning a list of recent metrics for a specific device
+    // FILTERING OPERATIONS
     @Override
     public List<MetricEntity> findRecentMetricsByDevice(String device) {
         return metricRepository.findRecentMetricsByDevice(device);
     }
 
-    //used for returning the most recent metric for a specific metric and device
     @Override
-    public MetricEntity findTopByDeviceAndMetricOrderByTimestampDesc(String device, String metric) {
-        return metricRepository.findTopByDeviceAndMetricOrderByTimestampDesc(device, metric);
+    public Optional<MetricEntity> findTopByDeviceAndMetricOrderByTimestampDesc(String device, String metric) {
+        return Optional.ofNullable(metricRepository.findTopByDeviceAndMetricOrderByTimestampDesc(device, metric));
     }
 
     @Override
-    public Page<MetricEntity> searchMetrics(String device, String metric, Date startDate, Date endDate, Pageable pageable) {
+    public Page<MetricEntity> searchMetrics(String device, String metric, Instant startDate, Instant endDate, Pageable pageable) {
         return metricRepository.searchMetrics(device, metric, startDate, endDate, pageable);
     }
 
+    @Override
+    public List<MetricEntity> findMetricHistoryByDeviceAndMetric(String device, String metric, Instant startDate, Instant endDate) {
+        Optional<MetricEntity> firstMetricOpt = Optional.ofNullable(metricRepository.findTopByDeviceAndMetricOrderByTimestampAsc(device, metric));
+        Optional<MetricEntity> lastMetricOpt = Optional.ofNullable(metricRepository.findTopByDeviceAndMetricOrderByTimestampDesc(device, metric));
 
+        if (firstMetricOpt.isEmpty() || lastMetricOpt.isEmpty()) {
+            return List.of();  // No data found
+        }
+
+        Instant firstTimestamp = firstMetricOpt.get().getTimestamp();
+        Instant lastTimestamp = lastMetricOpt.get().getTimestamp();
+
+        if (startDate == null) {
+            startDate = firstTimestamp;
+        }
+        if (endDate == null) {
+            endDate = lastTimestamp;
+        }
+
+        return metricRepository.findByDeviceAndMetricAndTimestampBetweenOrderByTimestampAsc(device, metric, startDate, endDate);
+    }
 }
