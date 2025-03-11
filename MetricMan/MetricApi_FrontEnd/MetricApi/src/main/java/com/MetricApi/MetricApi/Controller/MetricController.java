@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import com.MetricApi.MetricApi.Service.MetricService;
 import com.MetricApi.MetricApi.Model.MetricEntity;
 
+@CrossOrigin(origins = "*") // Allow all origins
 @RestController
 @RequestMapping("metrics")
 public class MetricController {

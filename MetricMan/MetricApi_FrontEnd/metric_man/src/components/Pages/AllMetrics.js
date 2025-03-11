@@ -32,7 +32,7 @@ const AllMetrics = () => {
             if (startDate) params.append('startDate', new Date(startDate).toISOString());
             if (endDate) params.append('endDate', new Date(endDate).toISOString());
 
-            const response = await fetch(`http://localhost:8081/metrics/search?${params.toString()}`);
+            const response = await fetch(`http://13.60.250.142:8081/metrics/search?${params.toString()}`);
             const data = await response.json();
             setMetrics(data.content);
             setTotalElements(data.totalElements);
@@ -43,7 +43,7 @@ const AllMetrics = () => {
 
     useEffect(() => {
         fetchMetrics();
-        const interval = setInterval(fetchMetrics, 15000); // Fetch every 15 seconds
+        const interval = setInterval(fetchMetrics, 30000); // Fetch every 15 seconds
         return () => clearInterval(interval);
     }, [order, orderBy, page, rowsPerPage, searchTerm, filter, startDate, endDate]);
 

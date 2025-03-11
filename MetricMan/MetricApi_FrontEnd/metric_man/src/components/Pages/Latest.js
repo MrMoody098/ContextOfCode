@@ -27,18 +27,18 @@ const Latest = () => {
 
         // Create a function to update all metrics
         const updateMetrics = () => {
-            fetchData('http://localhost:8081/metrics/recent/LocalPC/cpuutilization', setCpuUtilization);
-            fetchData('http://localhost:8081/metrics/recent/LocalPC/gpuutilization', setGpuUtilization);
-            fetchData('http://localhost:8081/metrics/recent/LocalPC/gputemp', setGpuTemp);
-            fetchData('http://localhost:8081/metrics/recent/CryptoAPI/btcprice', setBtcPrice);
-            fetchData('http://localhost:8081/metrics/recent/CryptoAPI/solprice', setSolPrice);
+            fetchData('http://13.60.250.142:8081/metrics/recent/LocalPC/cpuutilization', setCpuUtilization);
+            fetchData('http://13.60.250.142:8081/metrics/recent/LocalPC/gpuutilization', setGpuUtilization);
+            fetchData('http://13.60.250.142:8081/metrics/recent/LocalPC/gputemp', setGpuTemp);
+            fetchData('http://13.60.250.142:8081/metrics/recent/CryptoAPI/btcprice', setBtcPrice);
+            fetchData('http://13.60.250.142:8081/metrics/recent/CryptoAPI/solprice', setSolPrice);
         };
 
         // Fetch initially
         updateMetrics();
 
         // Set up polling every 15 seconds
-        const intervalId = setInterval(updateMetrics, 15000);
+        const intervalId = setInterval(updateMetrics, 30000);
 
         // Cleanup interval on unmount
         return () => clearInterval(intervalId);

@@ -25,7 +25,7 @@ const NavBar = () => {
   // Function to send a command via REST API
   const openSpotify = async () => {
     try {
-      const response = await fetch('http://localhost:8081/api/commands/send-command', {
+      const response = await fetch('http://13.60.250.142:8081/api/commands/send-command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ command: 'open_spotify' }),
